@@ -5,7 +5,7 @@
 ::: demo 
 ```html
 <template>
-  <vc-detail-list :format="format" :data="data" :column="column">
+  <vc-detail-list :format="format" :data="data" :column="column" defaultVal="-">
     <template #test="{data, value, index}">
       {{value}}
       <vc-btn @click="toggleEvt(index)">{{format[index+1].hide ? '显示':'隐藏'}}</vc-btn>
@@ -59,6 +59,10 @@ export default {
           label: 'Hide',
           key: 'hide',
           hide: true
+        },
+        {
+          label: 'DefaultVal',
+          key: 'defaultVal'
         }
       ],
       data: {
@@ -68,11 +72,17 @@ export default {
         data: '数据对象',
         fix: '--',
         slot: 'slot data',
-        hide: '这是隐藏的数据'
+        hide: '这是隐藏的数据',
+        defaultVal: ''
       }
     }
   },
   methods: {
+    /** 
+     * 通过事件来显示内容
+     * data {Object} this.data
+     * item {Object} format中当前的元素
+     */
     funEvt (data, item) {
       console.log(data, item)
       return data[item.key] || '我是从事件中返回的内容'
@@ -97,6 +107,7 @@ export default {
 | **separator** | `String` | 分隔符 |  |  |
 | **labelAlign** | `String` | 标题位置，参考 text-align | left |  |
 | **column** | `String|Number` | 分栏设置，默认为1栏 | 1 |  |
+| **defaultVal** | `String` | 默认值 |  |  |
 
 ## format
 | 参数 | 类型 | 说明 | 默认值 | 可选值 |
@@ -107,8 +118,11 @@ export default {
 | **mark** | `{Object}` | 提示内容 |  |  |
 | **- width** | `{String}` | 设置宽度，如 => {"100px"}, |  |  |
 | **- inner** | `{String}` | 需要显示内容 |  |  |
-| **fun** | `{Function}` | 调用方法，返回(data, item)，接收输出字符串 |  |  |
+| **fun** | `{Function}` | 调用方法，给方法提供(data, item)，需要返回一个字符串显示内容 |  |  |
 | **prefix** | `{String}` | 标题前缀 |  |  |
 | **suffix** | `{String}` | 标题后缀 |  |  |
 | **hide** | `{boolean}` | 隐藏与显示 |  |  |
-| **slot** | `{string}` | 插槽 |  |  |
+| **slot** | `{string}` | 插槽模式，定义一个插槽的名称，调用时提供{data, value, index} |  |  |
+| **- data** | `{Object}` | this.data的数据 |  |  |
+| **- value** | `{Format Key}` | format中对应key的值 |  |  |
+| **- index** | `{Number}` | 当前索引 |  |  |
